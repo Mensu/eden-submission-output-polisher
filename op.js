@@ -78,6 +78,12 @@ function polishSubmissionOutput(rawData) {
                         // else the line must contain output content => start from index #3
       polishedData += (linenumString + splitData[i].substring(start) + '\n');
 
+        // if we have encountered two borders, namely no more borders to encounter
+        //   => quit linenum addition mode
+      if (!borderToEncounter) toAddLinenum = false;
+      continue;
+    }
+
 /* --------- demo ----------
 first we explain how to get formatted linenum with ('00' + (linenum++)).slice(-3)
 It's a pity that I failed to find a printf-like function in nodejs that supports %0*d
@@ -188,12 +194,6 @@ In this way we obtain as a result:
 
 */
 
-        // if we have encountered two borders, namely no more borders to encounter
-        //   => quit linenum addition mode
-      if (!borderToEncounter) toAddLinenum = false;
-      continue;
-    }
-
       // if the line starts with '     [Test input]'    (=> is actually [Test input])
       //    and we are out of input polish mode
     if (!toPolishInput && splitData[i].match(/^     \[T/)) {
@@ -211,6 +211,11 @@ In this way we obtain as a result:
                             // else, the line must contain input data => start from index #5
       polishedData += (splitData[i].substring(start - Boolean(isBorder || isTestInput)) + '\n');
 
+  // if we have encountered two borders, namely there are no more borders to encounter
+        //   => we have finished polish work in the block above => quit
+      if (!borderToEncounter) toPolishInput = false;
+      continue;
+    }
 /* -------- demo ---------
 0123456
      [Test input]
@@ -281,13 +286,6 @@ In this way we obtain as a result:
 +---------------------------------------------------------------------
 
 */
-
-  // if we have encountered two borders, namely there are no more borders to encounter
-        //   => we have finished polish work in the block above => quit
-      if (!borderToEncounter) toPolishInput = false;
-      continue;
-    }
-
     
     if (!(toPolishInput && toAddLinenum)) polishedData += (splitData[i] + '\n');
     // if (toJudge) {
@@ -341,13 +339,13 @@ function start() {
       console.log('Ready to polish "./output.txt"');
       return readDataFrom("./output.txt", function(err, filename, rawData) {
         if (err) {
-          console.log('\n', err.message, '\n');
+          console.log('', err.message);
           console.log('Please get ./output.txt ready and try again...');
           start();
         } else {
           writeFile(filename, polishSubmissionOutput(rawData), function(err) {
             if (err) {
-              console.log('\n', err.message);
+              console.log('', err.message);
             } else console.log('   ..."' + filename + '" was polished successfully!');
           });
         }
@@ -374,17 +372,17 @@ function start() {
         console.log("Ready to polish '" + oneFile + "'");
         readDataFrom(oneFile, function(err, filename, rawData) {
           if (err) {
-            console.log('\n', err.message);
+            console.log('', err.message);
           } else {
             writeFile(filename, polishSubmissionOutput(rawData), function(err) {
               if (err) {
-                console.log('\n', err.message);
+                console.log('', err.message);
               } else console.log('   ..."' + filename + '" was polished successfully!');
             });
           }
         });
       } else if (oneFile != '') {  // else => ignore
-        console.log("invalid file '" + oneFile + "' ignored\n");
+        console.log("invalid file '" + oneFile + "' ignored");
       }
     }
       // no valid id input
