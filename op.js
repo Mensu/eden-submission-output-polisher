@@ -1,9 +1,10 @@
+var windows = false;
+
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var prompt = require('prompt');
 var getDirName = path.dirname;
-var windows = false;
 
 function readDataFrom(filename, callback) {
   fs.stat(filename, function(err, stat) {
@@ -12,10 +13,10 @@ function readDataFrom(filename, callback) {
       else throw err;
     } else {
       fs.readFile(filename, 'utf-8', function(err, rawData) {
-        if (err) callback(err);
-        else {
-          callback(undefined, filename, rawData);
-        }
+        if (err) {
+          if (callback) callback(err);
+          else throw err;
+        } else if (callback) callback(undefined, filename, rawData.replace(/\r\n/g, '\n'));
       });
     }
   });
@@ -27,8 +28,10 @@ function writeFile(path, contents, callback) {
     if (err) throw err;
     if (windows) contents = contents.replace(/\n/g, '\r\n');
     fs.writeFile(path, contents, function(err) {
-      if (err) throw err;
-      else if (callback) callback();
+      if (err) {
+        if (callback) callback(err);
+        else throw err;
+      } else if (callback) callback();
     });
   });
 }
@@ -326,8 +329,16 @@ function start() {
   prompt.start();
   console.log('Please input the filenames (supports multiple filenames separated by spaces)');
   console.log('or [simply press Enter] to polish ./output.txt');
-  console.log('  *** WARNING: The original file will BE OVERWRITTEN. It is wise to backup in advance.');
-  console.log('  *** Note: We only accept .txt files');
+  console.log('  *** WARNING: The original file will be overwritten! It is wise to backup in advance.');
+  console.log('  *** Note: We only accept .txt files encoded in utf-8');
+  if (windows) {
+    console.log('  *** Note: If the filename contains white spaces like "my output.txt", please bother to use double quotation marks ["]');
+    console.log('  *** my output.txt => "my output.txt"');
+  } else {
+    console.log('  *** Note: If the filename contains white spaces like "my output.txt", please bother to add "\\" before white spaces, even when you have put it in quotation marks');
+    console.log('  *** my output.txt => my\\ output.txt');
+  }
+
   prompt.get([{
     name: 'files',
     type: 'string',
@@ -335,8 +346,8 @@ function start() {
     before: function(files) {return files.split(' ');}
   }], function(err, result) {
     if (err) throw err;
-    var rawFiles = result.files, count = 0, skip = 0;
-      // simply press Enter => fetch unfinished assignments
+    var rawFiles = result.files, countForValidFilename = 0, skip = 0;
+      // simply press Enter => polish "./output.txt"
       console.log('');
     if (rawFiles.length == 1 && rawFiles[0] == '') {
       console.log('Ready to polish "./output.txt"');
@@ -354,24 +365,36 @@ function start() {
         }
       });
     }
+    var numOfRawFiles = rawFiles.length;
     for (i in rawFiles) {
       if (skip) {
         --skip;
         continue;
       }
       var oneFile = rawFiles[i], length = oneFile.length;
-      while (oneFile[length - 1] == '\\') {
-        ++skip;
-        console.log(oneFile);
-        oneFile = (oneFile.substring(0, length - 1) + ' ' + rawFiles[++i]);
-        length = oneFile.length;
+        // sanitize filenames. Badly needs improvement
+      if (windows) {
+        while (oneFile[0] == '"' && (oneFile[length - 1] != '"' || length == 1)) {
+          ++skip;
+          if (i + 1 == numOfRawFiles) break;
+          else oneFile += (' ' + rawFiles[++i]);
+          length = oneFile.length;
+        }
+      } else {
+        while (oneFile[length - 1] == '\\') {
+          ++skip;
+          if (i + 1 == numOfRawFiles) break;
+          oneFile = (oneFile.substring(0, length - 1) + ' ' + rawFiles[++i]);
+          length = oneFile.length;
+        }
       }
       if ((oneFile[0] == "'" || oneFile[0] == '"') && oneFile[0] == oneFile[length - 1])
-          oneFile = oneFile.substring(1, length - 1);
-      
+            oneFile = oneFile.substring(1, length - 1).replace(/(^( *))|(( *)$)/g, '');
+
+        // 
       if (oneFile.match(/(.txt)$/)) {
           // filename is valid => polish it
-        ++count;
+        ++countForValidFilename;
         console.log("Ready to polish '" + oneFile + "'");
         readDataFrom(oneFile, function(err, filename, rawData) {
           if (err) {
@@ -388,8 +411,8 @@ function start() {
         console.log("invalid file '" + oneFile + "' ignored");
       }
     }
-      // no valid id input
-    if (count == 0) {
+      // no valid filename input
+    if (countForValidFilename == 0) {
       console.log('Bad input! Please try again...');
       return start();
     }

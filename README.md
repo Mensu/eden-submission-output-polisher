@@ -9,26 +9,26 @@ Make submission output generated on eden more convenient to read and utilize!
 - get rid of "|"s in test input
 - add line numbers for you
 
-Note: Only txt files are accepted.  
-WARNING: The original file will be covered. It is wise to backup in advance.
+Note: Only txt files encoded in utf-8 are accepted.  
+WARNING: The original file will be overwritten. It is wise to backup in advance. Filenames with special symbols are deprecated.
 
 ![before vs after comparison](http://7xrahq.com1.z0.glb.clouddn.com/output-polisher-before-after-comparison.png)
 
 
-# Precompiled Binaries (not available for the moment)
+# Precompiled Binaries
 
 There are some precompiled binaries ( by using ``enclose`` )
 
-[``Windows-32bit``](?)
+[``Windows-32bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Win32.exe)
 ``? MB``
 
-[``Windows-64bit``](?)
+[``Windows-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Win64.exe)
 ``? MB``
 
-[``Mac-64bit``](?)
+[``Mac-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Mac64.exe)
 ``? MB``
 
-[``Ubuntu-64bit``](?)
+[``Ubuntu-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Ubuntu64.exe)
 ``? MB``
 
 You only need to execute it
@@ -83,4 +83,3 @@ curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install nodejs
 ~~~
 
-# Details (not available for the moment)
