@@ -10,7 +10,7 @@ Make submission output generated on eden more convenient to read and utilize!
 - add line numbers for you
 
 Note: Only txt files encoded in utf-8 are accepted.  
-WARNING: The original file will be overwritten. It is wise to backup in advance. Filenames with special symbols are deprecated.
+WARNING: The original file will be overwritten. It is wise to backup in advance. Filenames containing special characters are deprecated.
 
 ![before vs after comparison](http://7xrahq.com1.z0.glb.clouddn.com/output-polisher-before-after-comparison.png)
 
