@@ -25,10 +25,10 @@ There are some precompiled binaries ( by using ``enclose`` )
 [``Windows-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Win64.exe)
 ``11.7 MB``
 
-[``Mac-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Mac64.exe)
+[``Mac-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Mac64)
 ``16.0 MB``
 
-[``Ubuntu-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Ubuntu64.exe)
+[``Ubuntu-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Ubuntu64)
 ``17.8 MB``
 
 You only need to execute it
