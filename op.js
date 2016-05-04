@@ -36,7 +36,7 @@ function writeFile(path, contents, callback) {
 
 function polishSubmissionOutput(rawData) {
   var splitData = rawData.split('\n'), polishedData = '';
-    // flags we need in full marks judgment mode
+    // flags we need in full marks judgment
   // var toJudge = false, fullmark = true;
   // var beforeGoogleStyle = true, beforeStandard = true, beforeMemory = true;
   var afterExecRandom = false;
@@ -50,16 +50,18 @@ function polishSubmissionOutput(rawData) {
   var toPolishInput = false, isTestInput = false;
 
     // flags we need in linenum addition mode
-                          // isYSOutput: is Your 
+                          // isYSOutput: is either 'Your program's stdout output:' or 'Standard answer's stdout output:'
   var toAddLinenum = false, isYSOutput = false;
   var linenum = 0;
 
     // deal with data line by line
   for (i in splitData) {
 
+      // when we are out of linenum addition mode:
       // if the line starts with '     Your program's stdout output:' or '     Standard answer's stdout output:'
-      //    and we are out of linenum addition mode
-    if (!toAddLinenum && afterExecRandom && splitData[i].match(/^((     Y)|(     S))/)) {
+      //    and the block below needs linenum
+    if (!toAddLinenum && (afterExecRandom || (splitData[i + 2] && splitData[i + 2].match(/^    \|/)))
+      && splitData[i].match(/^((     Y)|(     S))/)) {
         // enter polish linenum addition mode
       toAddLinenum = true, isYSOutput = true;
       borderToEncounter = 2, linenum = 1;
@@ -201,7 +203,7 @@ In this way we obtain as a result:
       toPolishInput = true, isTestInput = true;
       borderToEncounter = 2, start = 5;
     }
-      // access input polish mode
+      // in input polish mode
     if (toPolishInput) {
       isBorder = splitData[i].match(/^    \+/);
         // if the line is a border
@@ -322,9 +324,10 @@ In this way we obtain as a result:
 
 function start() {
   prompt.start();
-  console.log('Please input the filenames');
+  console.log('Please input the filenames (supports multiple filenames separated by spaces)');
   console.log('or [simply press Enter] to polish ./output.txt');
-  console.log('  *** Note: we only accept .txt files');
+  console.log('  *** WARNING: The original file will BE OVERWRITTEN. It is wise to backup in advance.');
+  console.log('  *** Note: We only accept .txt files');
   prompt.get([{
     name: 'files',
     type: 'string',

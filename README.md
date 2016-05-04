@@ -9,7 +9,7 @@ Make submission output generated on eden more convenient to read and utilize!
 - get rid of "|"s in test input
 - add line numbers for you
 
-WARNING: Only txt files are accepted.  
+Note: Only txt files are accepted.  
 WARNING: The original file will be covered. It is wise to backup in advance.
 
 ![before vs after comparison](http://7xrahq.com1.z0.glb.clouddn.com/output-polisher-before-after-comparison.png)
