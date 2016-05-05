@@ -59,8 +59,7 @@ save it as ``run.sh``, use ``sudo chmod +x ./run.sh`` and have it run on termina
 \>\> Create a .sh file containing
 
 ~~~
-cd "/home/$USER/Downloads"
-gnome-terminal -x bash -c "./OutputPolisher-Ubuntu64; printf 'Please press Enter to continue'; read"
+gnome-terminal -x bash -c "cd "/home/$USER/Downloads"; ./OutputPolisher-Ubuntu64; printf 'Please press Enter to continue'; read"
 ~~~
 save it as ``run.sh``, use ``sudo chmod +x ./run.sh`` and have it run on terminal (double click to run is possible as well)  
 
