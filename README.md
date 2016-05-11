@@ -3,14 +3,20 @@
 - [``mgsweet``](https://github.com/mgsweet/Eden-Answer-Improvement) who inspired me to have a try by myself
 
 
+# New
+- fix a bug where contents after [Time limit ...] will be wrongly deleted
+- more complicated filenames on Ubuntu and Mac are supported
+
+We would appreciate it if you find a **filename that cannot be properly recognized** by the program and willing to [report to us](mailto:yxshw55@qq.com)!
+
 # Main Features
 Make submission output generated on eden more convenient to read and utilize!
 
 - get rid of "|"s in test input
-- add line numbers for you
+- add line numbers for random tests
 
 Note: Only txt files encoded in utf-8 are accepted.  
-WARNING: The original file will be overwritten. It is wise to backup in advance. Filenames containing special characters are deprecated.
+WARNING: The original file will be OVERWRITTEN. It is wise to backup in advance.
 
 ![before vs after comparison](http://7xrahq.com1.z0.glb.clouddn.com/output-polisher-before-after-comparison.png)
 
@@ -19,16 +25,16 @@ WARNING: The original file will be overwritten. It is wise to backup in advance.
 
 There are some precompiled binaries ( by using ``enclose`` )
 
-[``Windows-32bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Win32.exe)
+[``Windows-32bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Win32.exe)
 ``9.3 MB``
 
-[``Windows-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Win64.exe)
+[``Windows-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Win64.exe)
 ``11.7 MB``
 
-[``Mac-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Mac64)
+[``Mac-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Mac64)
 ``16.0 MB``
 
-[``Ubuntu-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.1-alpha/OutputPolisher-Ubuntu64)
+[``Ubuntu-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Ubuntu64)
 ``17.8 MB``
 
 You only need to execute it
