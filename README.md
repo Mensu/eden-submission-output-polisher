@@ -7,7 +7,7 @@
 - fix a bug where contents after [Time limit ...] will be wrongly deleted
 - more complicated filenames on Ubuntu and Mac are supported
 
-We would appreciate it if you find a **filename that cannot be properly recognized** by the program and willing to [report to us](mailto:yxshw55@qq.com)!
+We would appreciate it if you find a **filename that cannot be properly recognized** by the program and are willing to [report to us](mailto:yxshw55@qq.com)!
 
 # Main Features
 Make submission output generated on eden more convenient to read and utilize!
