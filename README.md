@@ -1,3 +1,5 @@
+#### Please feel free to fork the repository, create new issues as well as make pull requests. Thanks in advance for all your participation!
+
 # Thanks to
 
 - [``mgsweet``](https://github.com/mgsweet/Eden-Answer-Improvement) who inspired me to have a try by myself
@@ -59,7 +61,7 @@ save it as ``run.bat`` and double click to run
 cd "/Users/$USER/Downloads"
 ./OutputPolisher-Mac64
 ~~~
-save it as ``run.sh``, use ``sudo chmod +x ./run.sh`` and have it run on terminal (double click to run is possible as well)  
+save it as ``run.sh``, use ``sudo chmod +x ./run.sh /Users/$USER/Downloads/OutputPolisher-Mac64`` and have it run on terminal (double click to run is possible as well)  
 
 - on Ubuntu ( suppose the downloader is located in /home/$USER/Downloads/ )  
 \>\> Create a .sh file containing
@@ -67,7 +69,7 @@ save it as ``run.sh``, use ``sudo chmod +x ./run.sh`` and have it run on termina
 ~~~
 gnome-terminal -x bash -c "cd "/home/$USER/Downloads"; ./OutputPolisher-Ubuntu64; printf 'Please press Enter to continue'; read"
 ~~~
-save it as ``run.sh``, use ``sudo chmod +x ./run.sh`` and have it run on terminal (double click to run is possible as well)  
+save it as ``run.sh``, use ``sudo chmod +x ./run.sh /home/$USER/Downloads/OutputPolisher-Ubuntu64`` and have it run on terminal (double click to run is possible as well)  
 
 # Run Source Code on node.js
 
