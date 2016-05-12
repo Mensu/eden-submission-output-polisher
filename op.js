@@ -353,7 +353,7 @@ function start() {
   prompt.start();
   console.log('Please input the filenames (supports multiple filenames separated by spaces)');
   console.log('or [simply press Enter] to polish ./output.txt');
-  console.log('  *** WARNING: The original file will get OVERWRIITEN! It is wise to backup in advance.');
+  console.log('  *** WARNING: The original file will get OVERWRITTEN! It is wise to backup in advance.');
   console.log('  *** Note: We only accept .txt files encoded in UTF-8.');
   console.log('  *** Note: It is suggested that you drag the file onto the terminal.');
   if (windows) {
