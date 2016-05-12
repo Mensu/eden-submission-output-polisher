@@ -42,16 +42,16 @@ function writeFile(path, contents, callback) {
 }
 
 
-function removeUbuntuFilenameQuotationMarks(str, quatation) {
+function removeUbuntuFilenameQuotationMarks(str, quotation) {
   var newStr = '';
   for (var i = 0; i < str.length;) {
     if (str[i] != '"' && str[i] != "'") {
-      if (!quatation && str[i] == '\\') ++i;
+      if (!quotation && str[i] == '\\') ++i;
       newStr = newStr.concat(str[i++]);
     } else {
       if (str.substring(i, i + 4).match(/(\"\\.\")|(\'\\.\')/)) {
         ++i;
-        if (!quatation) newStr = newStr.concat(str[i]);
+        if (!quotation) newStr = newStr.concat(str[i]);
         newStr = newStr.concat(str[++i]);
         i += 2;
       } else newStr = newStr.concat(str[i++]);
