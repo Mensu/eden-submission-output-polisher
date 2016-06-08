@@ -7,7 +7,6 @@ var mkdirp = require('mkdirp');
 var path = require('path');
 var prompt = require('prompt');
 var getDirName = path.dirname;
-var sprintf = require('sprintf-js').sprintf;
 
 function readDataFrom(filename, callback) {
   fs.stat(filename, function(err, stat) {
@@ -29,18 +28,15 @@ function readDataFrom(filename, callback) {
 function writeFile(path, contents, callback) {
   mkdirp(getDirName(path), function(err) {
     if (err) {
-      console.log('\nError:', err.message);
-      if (callback) return callback(err);
+      if (callback) console.log('', err.message), callback(err);
       else throw err;
     }
     if (windows) contents = contents.replace(/\n/g, '\r\n');
     fs.writeFile(path, contents, function(err) {
       if (err) {
-        console.log('\nError:', err.message);
-        if (callback) return callback(err);
+        if (callback) console.log('', err.message), callback(err);
         else throw err;
-      }
-      else if (callback) return callback(null);
+      } else if (callback) callback();
     });
   });
 }
@@ -68,8 +64,8 @@ function removeUbuntuFilenameQuotationMarks(str, quotation) {
 function polishSubmissionOutput(rawData) {
   var splitData = rawData.split('\n'), polishedData = '';
     // flags we need in full marks judgment
-  var toJudgeFullmark = false, fullmark = true;
-  var beforeGoogleStyle = true, beforeStandard = true, beforeMemory = true;
+  // var toJudge = false, fullmark = true;
+  // var beforeGoogleStyle = true, beforeStandard = true, beforeMemory = true;
   var afterExecRandom = false;
 
     // flags for borders and substring's startindex
@@ -105,7 +101,7 @@ function polishSubmissionOutput(rawData) {
       var nonContent = isBorder || isYSOutput;
                           // if the line is output content => generate linenum for it
                           // else => no linenum generated
-      var linenumString = ((nonContent) ? '' : sprintf('%03d', linenum++));
+      var linenumString = ((nonContent) ? '' : ('00' + (linenum++)).slice(-3));
       var start = ((nonContent) ? 0 : 3);
                         // if the line is non-content => start from index #0
                         // else the line must contain output content => start from index #3
@@ -116,6 +112,116 @@ function polishSubmissionOutput(rawData) {
       if (!borderToEncounter) toAddLinenum = false;
       continue;
     }
+
+/* --------- demo ----------
+first we explain how to get formatted linenum with ('00' + (linenum++)).slice(-3)
+It's a pity that I failed to find a printf-like function in nodejs that supports %0*d
+so I found a workaround:
+  if linenum is a one-digit number, say 5, ('00' + (linenum++)) would be '005'
+~~~~~~~~~~~~~~~
+(-3)(-2)(-1)
+ 0   0   5
+~~~~~~~~~~~~~~~
+   *** we start from index #-3 and obtain '005' as a result
+
+
+  if linenum is a two-digit number, say 43, ('00' + (linenum++)) would be '0043'
+~~~~~~~~~~~~~~~
+(-4)(-3)(-2)(-1)
+ 0   0   4   3
+~~~~~~~~~~~~~~~
+   *** we start from index #-3 and obtain '043' as a result
+
+
+Now we show how we cope with the data below:
+0123456
+     Your program's stdout output:
+0123456
+    +---------------------------------------------------------------------
+0123456
+    |{}
+0123456
+    |is empty set: 0
+0123456
+    |append: 1
+0123456
+    |append: 1
+0123456
+    |{-3202, 3054}
+0123456
+    |append: 0
+0123456
+    |{-3202, 3054}
+0123456
+    |is empty set: 0
+0123456
+    |remove: 1
+0123456
+    |{3054, 4001, 4794, 5985}
+0123456
+    |remove: 0
+0123456
+    |{3054, 4001, 4794, 5985}
+0123456
+    |
+0123456
+    +---------------------------------------------------------------------
+0123456
+
+
+Case 1: If the line is non-content (Your output, Standard output, or borders +----...)
+~~~~~~~~~~~~~~~~~~~~
+0123456
+     Your program's stdout output:
+0123456
+~~~~~~~~~~~~~~~~~~~~
+
+   *** we keep the line intact by starting from index #0 and obtain before appending '\n'
+   0123456
+>>>     Your program's stdout output:<<<
+   0123456
+
+=>
+     Your program's stdout output:\n
+
+
+Case 2: If the line contains output data (the linenum for the line below is 2)
+~~~~~~~~~~~~~~~~~~~~
+0123456
+    |is empty set: 0
+0123456
+~~~~~~~~~~~~~~~~~~~~
+
+   *** we start from index #3 and obtain before prefixing '002' and appending '\n'
+0123456
+>>> |is empty set: 0<<<
+0123456
+
+=>'002' + ' |is empty set: 0' + '\n'
+=>
+002 |is empty set: 0\n
+
+
+In this way we obtain as a result:
+     Your program's stdout output:
+    +---------------------------------------------------------------------
+001 |{}
+002 |is empty set: 0
+003 |append: 1
+004 |append: 1
+005 |{-3202, 3054}
+006 |append: 0
+007 |{-3202, 3054}
+008 |is empty set: 0
+009 |remove: 1
+010 |{3054, 4001, 4794, 5985}
+011 |remove: 0
+012 |{3054, 4001, 4794, 5985}
+013 |
+    +---------------------------------------------------------------------
+
+
+*/
 
       // if the line starts with '     [Test input]'    (=> is actually [Test input])
       //    and we are out of input polish mode
@@ -139,37 +245,106 @@ function polishSubmissionOutput(rawData) {
       if (!borderToEncounter) toPolishInput = false;
       continue;
     }
+/* -------- demo ---------
+0123456
+     [Test input]
+0123456
+    +---------------------------------------------------------------------
+0123456
+    |-32131 980 23131 23131 231312
+0123456
+    |-32 980 28981 89331 3892
+0123456
+    +---------------------------------------------------------------------
+0123456
+
+
+Case 1: If the line is [Test input]:
+~~~~~~~~~~~~~~~~~~~~
+0123456
+     [Test input]
+0123456
+~~~~~~~~~~~~~~~~~~~~
+
+   *** we start from index #4 and obtain ' [Test input]' before appending '\n'
+0123456
+>>>> [Test input]<<<
+0123456
+
+=>
+ [Test input]\n
+
+
+Case 2: If the line is a border:
+~~~~~~~~~~~~~~~~~~~~
+0123456
+    +---------------------------------------------------------------------
+0123456
+~~~~~~~~~~~~~~~~~~~~
+
+   *** we start from index #4 and obtain ' +---------...' before appending '\n'
+0123456
+>>>>+---------------------------------------------------------------------<<<
+0123456
+
+=>
+ +---------------------------------------------------------------------\n
+
+
+Case 3: If the line contains input data:
+~~~~~~~~~~~~~~~~~~~~
+0123456
+    |-32131 980 23131 23131 231312
+0123456
+~~~~~~~~~~~~~~~~~~~~
+
+   *** we start from index #5 and obtain input data before appending '\n'
+0123456
+>>>>>-32131 980 23131 23131 231312<<<
+0123456
+
+=>
+-32131 980 23131 23131 231312\n
+
+
+In this way we obtain as a result:
+ [Test input]
++---------------------------------------------------------------------
+-32131 980 23131 23131 231312
+-32 980 28981 89331 3892
++---------------------------------------------------------------------
+
+*/
     
     if (!(toPolishInput && toAddLinenum)) polishedData += (splitData[i] + '\n');
-    if (toJudgeFullmark) {
-      if (!splitData[i].match(/^Pass/)) fullmark = false;
-      toJudgeFullmark = false;
-    }
-    if (splitData[i].match(/^Unexpected error/)) fullmark = false;
+    // if (toJudge) {
+    //   if (!splitData[i].match(/^Pass/)) fullmark = false;
+    //   toJudge = false;
+    // }
     // if (beforeMemory) {
       if (!afterExecRandom) {
         // if (beforeStandard) {
         //   if (beforeGoogleStyle) {
-        //     if (splitData[i].match(/: check_style\]/)) {
-        //       beforeGoogleStyle = false;
-        //       if (fullmark) toJudgeFullmark = true;
-        //     }
-        //   }
-        //   if (splitData[i].match(/: execute_s/)) {
-        //     beforeStandard = false;
-        //     if (fullmark) toJudgeFullmark = true;
-        //   }
+            // if (splitData[i].match(/: check_style]/)) {
+            //   beforeGoogleStyle = false;
+            //   if (fullmark) toJudge = true;
+          //   // }
+          // }
+          // if (splitData[i].match(/: execute_s/)) {
+          //   beforeStandard = false;
+          //   // if (fullmark) toJudge = true;
+          // }
         // }
          if (splitData[i].match(/: execute_r/)) {
            afterExecRandom = true;
-           if (fullmark) toJudgeFullmark = true;
+           // if (fullmark) toJudge = true;
          }
        }
-      // if (splitData[i].match(/: validate_m/)) {
-      //   beforeMemory = false;
-      //   if (fullmark) toJudgeFullmark = true;
-      // }
-    // }
+  //     if (splitData[i].match(/: validate_m/)) {
+  //       beforeMemory = false;
+  //       if (fullmark) toJudge = true;
+  //     }
+  //   }
   }
   return polishedData;
 }
@@ -251,7 +426,7 @@ function start() {
             * obviously, rawFiles[i + 1] is the other part [output.txt"],
             * and we can now concatenate [my]         +         [ ] + [output.txt]
             *                   oneFile[0]~oneFile[length - 2]  ' '  rawFiles[i + 1]
-            *                          --- with oneFile = (oneFile.slice(0, -1) + ' ' + rawFiles[i + 1]);
+            *                          --- with oneFile = (oneFile.substring(0, length - 1) + ' ' + rawFiles[i + 1]);
             * therefore we got [my output.txt]
             * use "skip" to skip the ordinary loop that would have fetched us [output.txt]
             */
@@ -259,14 +434,14 @@ function start() {
           while (oneFile[length - 1] == '\\') {
             ++skip;
             if (i + 1 == numOfRawFiles) break;  // or rawFile[i + 1] would be undefined
-            oneFile = (oneFile.slice(0, -1) + ' ' + rawFiles[++i]);
+            oneFile = (oneFile.substring(0, length - 1) + ' ' + rawFiles[++i]);
             length = oneFile.length;
           }
         } else {
             /** if the filename begins with ["] but not ends with ["]
               * or the filename begins with ['] but not ends with [']
               * it's not complete
-              * the algorithm is the same as the one for windows above
+              * the algorithm is the same as the one above
               */
           while ((oneFile[0] == '"' && (oneFile[length - 1] != '"' || length == 1))
             || (oneFile[0] == "'" && (oneFile[length - 1] != "'" || length == 1))) {
@@ -285,7 +460,7 @@ function start() {
           while (oneFile[length - 1] == '\\') {
             ++skip;
             if (i + 1 == numOfRawFiles) break;  // or rawFile[i + 1] would be undefined
-            oneFile = (oneFile.oneFile.slice(0, -1) + '\\ ' + rawFiles[++i]);
+            oneFile = (oneFile.substring(0, length - 1) + '\\ ' + rawFiles[++i]);
             length = oneFile.length;
           }
         } else {
@@ -302,7 +477,7 @@ function start() {
       if ((oneFile[0] == "'" || oneFile[0] == '"') && oneFile[0] == oneFile[length - 1]) {
         // if the filename begins and ends with quotation marks ['] or ["]
           // => remove them, as well as extra white spaces at the beginning and the end
-        oneFile = oneFile.oneFile.slice(1, -1).replace(/(^( *))|(( *)$)/g, '');
+        oneFile = oneFile.substring(1, length - 1).replace(/(^( *))|(( *)$)/g, '');
 
           // if it's on Ubuntu
             // deal with patterns like ['\''] (=>[']), ['\ '] (=>[ ]), ["\""] (=>["])
