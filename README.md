@@ -27,16 +27,16 @@ WARNING: The original file will be OVERWRITTEN. It is wise to backup in advance.
 
 There are some precompiled binaries ( by using ``enclose`` )
 
-[``Windows-32bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Win32.exe)
+[``Windows-32bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/0.2-alpha/OutputPolisher-Win32.exe)
 ``9.3 MB``
 
-[``Windows-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Win64.exe)
+[``Windows-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/0.2-alpha/OutputPolisher-Win64.exe)
 ``11.7 MB``
 
-[``Mac-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Mac64)
+[``Mac-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/0.2-alpha/OutputPolisher-Mac64)
 ``16.0 MB``
 
-[``Ubuntu-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/v0.2-alpha/OutputPolisher-Ubuntu64)
+[``Ubuntu-64bit``](https://github.com/Mensu/eden-submission-output-polisher/releases/download/0.2-alpha/OutputPolisher-Ubuntu64)
 ``17.8 MB``
 
 You only need to execute it
